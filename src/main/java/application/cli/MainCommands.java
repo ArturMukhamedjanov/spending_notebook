@@ -216,7 +216,7 @@ public class MainCommands {
 
     }
 
-    private boolean checkMccsFree(List<Mcc> mccs) throws MccExistException{
+    public boolean checkMccsFree(List<Mcc> mccs) throws MccExistException{
         for(Mcc mcc : mccs){
             if(mccService.isMccCodeExists(mcc.getCode())){
                 Mcc exisingMcc = mccService.getMccByCode(mcc.getCode());
@@ -226,7 +226,7 @@ public class MainCommands {
         return true;
     }
 
-    private static List<Mcc> castIntArrToMcc(int[] mccCodes, Category category) throws MccCastException{
+    public static List<Mcc> castIntArrToMcc(int[] mccCodes, Category category) throws MccCastException{
         List<Mcc> mccs = new ArrayList<>();
         for(int mccCode : mccCodes){
             if(mccCode >= 1000 && mccCode <= 10000){
