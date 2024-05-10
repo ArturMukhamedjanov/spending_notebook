@@ -1,19 +1,22 @@
 package application.data_access;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
-
 import application.models.Mcc;
 import application.models.Month;
 import application.models.Transaction;
 import application.service.DAO.TransactionDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TransactionDAOImpl implements TransactionDAO {
+
+    private static final Logger logger = LoggerFactory.getLogger(TransactionDAOImpl.class);
+
     @Override
-    public void saveTransaction(Transaction transactionModel) { // Изменено имя метода saveSpend на saveTransaction
+    public void saveTransaction(Transaction transactionModel) {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -24,24 +27,24 @@ public class TransactionDAOImpl implements TransactionDAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.error("Error occurred while saving transaction.", e.getMessage());
         }
     }
 
     @Override
-    public Transaction getTransactionById(Long id) { // Изменено имя метода getSpendById на getTransactionById
+    public Transaction getTransactionById(Long id) {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         return entityManager.find(Transaction.class, id);
     }
 
     @Override
-    public List<Transaction> getAllTransactions() { // Изменено имя метода getAllSpends на getAllTransactions
+    public List<Transaction> getAllTransactions() {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         return entityManager.createQuery("SELECT t FROM Transaction t").getResultList();
     }
 
     @Override
-    public void updateTransaction(Transaction transactionModel) { // Изменено имя метода updateSpend на updateTransaction
+    public void updateTransaction(Transaction transactionModel) {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -52,12 +55,12 @@ public class TransactionDAOImpl implements TransactionDAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.error("Error occurred while updating transaction.", e.getMessage());
         }
     }
 
     @Override
-    public void deleteTransaction(Long id) { // Изменено имя метода deleteSpend на deleteTransaction
+    public void deleteTransaction(Long id) {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -71,7 +74,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.error("Error occurred while deleting transaction.", e.getMessage());
         }
     }
 
@@ -96,5 +99,4 @@ public class TransactionDAOImpl implements TransactionDAO {
                 .setParameter("month", month)
                 .getResultList();
     }
-
 }

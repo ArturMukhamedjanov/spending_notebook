@@ -1,16 +1,19 @@
 package application.data_access;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import application.models.Category;
 import application.service.DAO.CategoryDAO;
 
 public class CategoryDAOImpl implements CategoryDAO {
+
+    private static final Logger logger = Logger.getLogger(CategoryDAOImpl.class.getName());
 
     @Override
     public void saveCategory(Category category) {
@@ -24,7 +27,7 @@ public class CategoryDAOImpl implements CategoryDAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error occurred while saving category.", e);
         }
     }
 
@@ -32,14 +35,12 @@ public class CategoryDAOImpl implements CategoryDAO {
     public Category getCategoryById(Long id) {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         return entityManager.find(Category.class, id);
-
     }
 
     @Override
     public List<Category> getAllCategories() {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         return entityManager.createQuery("SELECT c FROM Category c").getResultList();
-
     }
 
     @Override
@@ -54,7 +55,7 @@ public class CategoryDAOImpl implements CategoryDAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error occurred while updating category.", e);
         }
     }
 
@@ -74,7 +75,7 @@ public class CategoryDAOImpl implements CategoryDAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error occurred while deleting category.", e);
         }
     }
 
@@ -89,6 +90,4 @@ public class CategoryDAOImpl implements CategoryDAO {
             return null;
         }
     }
-
-
 }

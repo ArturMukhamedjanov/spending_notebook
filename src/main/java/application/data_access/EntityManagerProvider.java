@@ -1,11 +1,14 @@
 package application.data_access;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.*;
 
 public class EntityManagerProvider {
 
+    private static final Logger logger = Logger.getLogger(EntityManagerProvider.class.getName());
     private static EntityManagerFactory entityManagerFactory;
     private static EntityManager entityManager;
 
@@ -13,7 +16,7 @@ public class EntityManagerProvider {
         try{
             entityManager = entityManagerFactory.createEntityManager();
         }catch(Exception e){
-            System.out.println("Unable to connect to database. Check login and password in persistence.xml.");
+            logger.log(Level.SEVERE, "Unable to connect to database. Check login and password in database.properties.", e.getMessage());
             System.exit(0);
         }
     }
@@ -26,7 +29,7 @@ public class EntityManagerProvider {
         try{
             entityManagerFactory = Persistence.createEntityManagerFactory("SpendingNotebookPU", properties);
         }catch(Exception e){
-            System.out.println("Unable to connect to db. Check url, login and password.");
+            logger.log(Level.SEVERE, "Unable to connect to db. Check url, login and password.", e.getMessage());
             System.exit(0);
         }
     }

@@ -17,6 +17,7 @@ import application.service.DAO.*;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Application {
@@ -26,6 +27,8 @@ public class Application {
     private MccDAO mccDAO;
     private CategoryDAO categoryDAO;
     private TransactionDAO spendDAO;
+
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     public void start(String[] args){
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -44,7 +47,7 @@ public class Application {
 
     private void overrideDatabaseConfig(String args[]){
         if(args.length != 4){
-            System.out.println("Wrong number of arguments. Watch Readme.md to see correct input");
+            logger.error("Wrong number of arguments. Watch Readme.md to see correct input");
             System.exit(0);
         }
         DatabaseConfig.setUrl(args[0]);
@@ -67,28 +70,31 @@ public class Application {
             ResultSet resultSet = statement.executeQuery(checkDatabaseQuery);
             if (!resultSet.next()) {
                 statement.executeUpdate(createDatabaseQuery);
-                System.out.println("Database created successfully!");
+                logger.info("Database created successfully!");
             } else {
-                System.out.println("Database already exists.");
+                logger.info("Database already exists.");
             }
         } catch (SQLException e) {
-            System.err.println("Error creating or checking database: " + e.getMessage());
+            logger.error("Error creating or checking database: {}", e.getMessage());
         }
     }
 
     private void setEnityManagerConfig(){
-        Map<String, String> properties = new HashMap<>();
-        properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
-        properties.put("javax.persistence.jdbc.url", DatabaseConfig.getUrl() + DatabaseConfig.getDatabaseName());
-        properties.put("javax.persistence.jdbc.user", DatabaseConfig.getUsername());
-        properties.put("javax.persistence.jdbc.password", DatabaseConfig.getPassword());
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.hbm2ddl.auto", "update");
-        EntityManagerProvider.setEnityManagerFactory(properties);
+        try{
+            Map<String, String> properties = new HashMap<>();
+            properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
+            properties.put("javax.persistence.jdbc.url", DatabaseConfig.getUrl() + DatabaseConfig.getDatabaseName());
+            properties.put("javax.persistence.jdbc.user", DatabaseConfig.getUsername());
+            properties.put("javax.persistence.jdbc.password", DatabaseConfig.getPassword());
+            properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+            properties.put("hibernate.hbm2ddl.auto", "update");
+            EntityManagerProvider.setEnityManagerFactory(properties);
+        }catch(Exception e){
+            logger.error("Error accessing database:", e.getMessage());
+        }
     }
 
     private void initDBConnection(){
-       
         EntityManagerProvider.ConnectToDB();
     }
 

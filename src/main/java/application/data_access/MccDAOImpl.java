@@ -1,6 +1,8 @@
 package application.data_access;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -9,7 +11,10 @@ import javax.persistence.NoResultException;
 import application.models.Mcc;
 import application.service.DAO.MccDAO;
 
-public class MccDAOImpl implements MccDAO{
+public class MccDAOImpl implements MccDAO {
+
+    private static final Logger logger = Logger.getLogger(MccDAOImpl.class.getName());
+
     @Override
     public void saveMcc(Mcc mcc) {
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
@@ -22,7 +27,7 @@ public class MccDAOImpl implements MccDAO{
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error occurred while saving MCC.", e.getMessage());
         }
     }
 
@@ -50,7 +55,7 @@ public class MccDAOImpl implements MccDAO{
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error occurred while updating MCC.", e.getMessage());
         }
     }
 
@@ -69,7 +74,7 @@ public class MccDAOImpl implements MccDAO{
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error occurred while deleting MCC.", e.getMessage());
         }
     }
 
@@ -78,10 +83,10 @@ public class MccDAOImpl implements MccDAO{
         EntityManager entityManager = EntityManagerProvider.getEntityManager();
         try {
             return (Mcc) entityManager.createQuery("SELECT m FROM Mcc m WHERE m.code = :code")
-                                .setParameter("code", code)
-                                .getSingleResult();
+                    .setParameter("code", code)
+                    .getSingleResult();
         } catch (NoResultException e) {
-            return null; 
+            return null;
         }
     }
 }
