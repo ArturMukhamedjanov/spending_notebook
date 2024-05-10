@@ -99,4 +99,15 @@ public class TransactionDAOImpl implements TransactionDAO {
                 .setParameter("month", month)
                 .getResultList();
     }
+
+    @Override
+    public List<Transaction> getTransactionsByNullMccAndMonth(Month month) {
+        EntityManager entityManager = EntityManagerProvider.getEntityManager();
+        TypedQuery<Transaction> query = entityManager.createQuery(
+                "SELECT t FROM Transaction t WHERE t.mcc IS NULL AND t.month = :month",
+                Transaction.class
+        );
+        query.setParameter("month", month);
+        return query.getResultList();
+    }
 }

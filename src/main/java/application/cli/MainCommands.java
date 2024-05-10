@@ -53,6 +53,8 @@ public class MainCommands {
         for (Category category : categoryService.getRootCategories()) {
             printCategoryTreeWithTotalSpent(category, month, 0);
         }
+        double totalSpentWithoutCategory = transactionService.getTotalSpentInCategoryForMonth(null, month); // Calculate total spent without category
+        System.out.println("Total spent without category: " + totalSpentWithoutCategory);
     }
 
     @CommandLine.Command(name = "remove_transaction", description = "Удалить трату")
@@ -104,16 +106,7 @@ public class MainCommands {
     }
 
 
-    @CommandLine.Command(name = "remove_category", description = "Удалить категорию трат")
-    void removeCategory(@CommandLine.Parameters(description = "Название категории") String categoryName) {
-        if (!categoryService.isCategoryNameExists(categoryName)) {
-            System.out.println("Category with name " + categoryName + " does not exist");
-            return;
-        }
-        Category category = categoryService.getCategoryByName(categoryName);
-        categoryService.deleteCategory(category.getId());
-        System.out.println("Category with name " + categoryName + " was successfully removed");
-    }
+    
 
 
     @CommandLine.Command(name = "add_group_to_category", description = "Добавить группу категорий в категорию")
@@ -168,7 +161,6 @@ public class MainCommands {
             return;
         }
     }   
-
 
     @CommandLine.Command(name = "delete_category", description = "Удалить категорию трат")
     void deleteCategory(@CommandLine.Parameters(description = "Название категории") String categoryName){

@@ -21,3 +21,55 @@
 
 ## Использование приложения
 #### Spending notebook консольное приложение, поддерживающие определенные команды. Узнать весь список команд можно введя команду help. К каждой команде прилагается описание аргументов и описание.
+
+#### Возможние команды:
+- help
+Usage: help
+Помощь
+- add_category
+Usage:  add_category arg0 arg1 ...
+Добавить категорию трат
+      <arg0>      Название категории
+      <arg1>...   MCC коды
+- add_group_to_category
+Usage:  add_group_to_category arg0 arg1 ...
+Добавить группу категорий в категорию
+      <arg0>      Название категории
+      <arg1>...   Категории для добавления
+- add_mcc_to_category
+Usage:  add_mcc_to_category arg0 arg1 ...
+Изменить категорию трат
+      <arg0>      Название категории
+      <arg1> ...   MCC коды
+- add_transaction
+Usage: add_transaction arg0 arg1 arg2 [arg3]
+Добавить трату
+      <arg0>     Название траты
+      <arg1>     Значение траты
+      <arg2>     Месяц
+      [<arg3>]   MCC (необязательно)
+- delete_category
+Usage: delete_category arg0
+Удалить категорию трат
+      <arg0>   Название категории
+- remove_transaction
+Usage: remove_transaction arg0 arg1 arg2
+Удалить трату
+      <arg0>   Название транзакции
+      <arg1>   Значение транзакции
+      <arg2>   Месяц транзакции
+- show_categories 
+Usage: show_categories
+Показать список категорий
+- show_all_by_month
+Usage: show_all_by_month arg0
+Показать список категорий с суммой потраченных средств в выбранный месяц
+      <arg0>   Месяц
+- show_all_by_month
+Usage: show_all_by_month arg0
+Показать список категорий с суммой потраченных средств в выбранный месяц
+      <arg0>   Месяц
+- show_category_by_monthes
+Usage: show_category_by_monthes arg0
+Траты в категории по месяцам (сумма за месяц)
+      <arg0>   Название категории

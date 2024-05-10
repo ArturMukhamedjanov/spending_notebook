@@ -14,4 +14,5 @@ public interface TransactionDAO {
     void deleteTransaction(Long id);
     List<Transaction> getTransactionsByNameAndValueAndMonth(String name, double value, Month month);
     List<Transaction> getTransactionsByMccAndMonth(Mcc mcc, Month month);
+    List<Transaction> getTransactionsByNullMccAndMonth(Month month);
 }
